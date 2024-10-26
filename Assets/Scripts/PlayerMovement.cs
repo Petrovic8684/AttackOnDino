@@ -5,6 +5,7 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private float moveSpeed;
     [SerializeField] private float jumpPower;
     [SerializeField] private Transform groundCotact;
+    [SerializeField] private AudioSource jumpSound;
     [SerializeField] private LayerMask groundLayer;
 
     private bool isFacingRight;
@@ -28,6 +29,7 @@ public class PlayerMovement : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Space) && IsGrounded()) // Ako korisnik pritisne SPACE na tastaturi i ako je igrac na zemlji
         {
             rigidbody2d.velocity = new Vector2(rigidbody2d.velocity.x, jumpPower); // Dodaj brzinu po Y osi
+            jumpSound.Play(); // Pusti zvuk za skok
         }
 
         Animate();
