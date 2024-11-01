@@ -1,26 +1,17 @@
 using Pathfinding;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public abstract class EnemyFollow : MonoBehaviour
 {
     [SerializeField] protected Transform target;
 
-
     [SerializeField] protected float activateDistance;
-
 
     [SerializeField] protected float updateSeconds;
 
-
     [SerializeField] protected float speed;
 
-
     [SerializeField] protected float nextWaypointDistance;
-
-
-
 
     protected bool followEnabled = true;
 
@@ -51,14 +42,14 @@ public abstract class EnemyFollow : MonoBehaviour
         }
     }
 
-    protected void OnPathComplete(Path p)
+    protected abstract void PathFollow();
+
+
+    protected bool TargetInDistance()
     {
-        if (!p.error)
-        {
-            path = p;
-            currentWaypoint = 0;
-        }
+        return Vector2.Distance(transform.position, target.transform.position) < activateDistance;
     }
+
 
     protected void UpdatePath()
     {
@@ -68,13 +59,12 @@ public abstract class EnemyFollow : MonoBehaviour
         }
     }
 
-
-    protected abstract void PathFollow();
-
-
-    protected bool TargetInDistance()
+    protected void OnPathComplete(Path p)
     {
-        return Vector2.Distance(transform.position, target.transform.position) < activateDistance;
+        if (!p.error)
+        {
+            path = p;
+            currentWaypoint = 0;
+        }
     }
-
 }

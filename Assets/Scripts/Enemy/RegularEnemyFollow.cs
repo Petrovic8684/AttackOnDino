@@ -1,26 +1,16 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class RegularEnemyFollow : EnemyFollow
 {
-
     [SerializeField] private RaycastHit2D isGrounded;
-
-    private bool isOnCoolDown;
-
-    [SerializeField]private float jumpForce;
-
+    [SerializeField] private float jumpForce;
     [SerializeField] private float jumpNodeHeightRequirement;
-
     [SerializeField] private float jumpModifier;
-
     [SerializeField] private float jumpCheckOffset;
-
-    private bool jumpEnabled, isJumping, isInAir;
-
     [SerializeField] private Vector3 startOffset;
-
+    private bool jumpEnabled, isJumping, isInAir;
+    private bool isOnCoolDown;
 
     protected override void Start()
     {
@@ -28,9 +18,9 @@ public class RegularEnemyFollow : EnemyFollow
         isJumping = false;
         isInAir = false;
         jumpEnabled = true;
+
         base.Start();
     }
-
 
     protected override void FixedUpdate()
     {
@@ -93,19 +83,16 @@ public class RegularEnemyFollow : EnemyFollow
         // Direction Graphics Handling
         if (directionLookEnabled)
         {
-            if (rb.velocity.x > 0.05f)
-            {
-                transform.localScale = new Vector3(-1f * Mathf.Abs(transform.localScale.x), transform.localScale.y, transform.localScale.z);
-            }
-            else if (rb.velocity.x < -0.05f)
+            if (target.transform.position.x >= transform.position.x)
             {
                 transform.localScale = new Vector3(Mathf.Abs(transform.localScale.x), transform.localScale.y, transform.localScale.z);
             }
+            else
+            {
+                transform.localScale = new Vector3(-1 * Mathf.Abs(transform.localScale.x), transform.localScale.y, transform.localScale.z);
+            }
         }
     }
-
-
-    
 
     private IEnumerator JumpCoolDown()
     {
@@ -113,5 +100,4 @@ public class RegularEnemyFollow : EnemyFollow
         yield return new WaitForSeconds(1f);
         isOnCoolDown = false;
     }
-
 }
