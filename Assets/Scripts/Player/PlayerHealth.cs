@@ -12,7 +12,10 @@ public class PlayerHealth : MonoBehaviour, IDamageable
     public static event Action OnPlayerDeath;
     [SerializeField] private float maxHealth;
     [SerializeField] private TextMeshProUGUI healthText;
+    [SerializeField] private AudioSource hurtSound;
+
     private float health;
+    private Animator animator;
 
     private void OnEnable()
     {
@@ -22,6 +25,11 @@ public class PlayerHealth : MonoBehaviour, IDamageable
     private void OnDisable()
     {
         OnPlayerDeath -= Die;
+    }
+
+    private void Awake()
+    {
+        animator = GetComponent<Animator>();
     }
 
     private void Start()
@@ -42,7 +50,6 @@ public class PlayerHealth : MonoBehaviour, IDamageable
         if (health - ammount > 0)
         {
             health -= ammount;
-            Debug.Log("Player health: " + health);
         }
         else
         {
@@ -50,11 +57,15 @@ public class PlayerHealth : MonoBehaviour, IDamageable
             OnPlayerDeath?.Invoke();
         }
 
+        hurtSound.PlayOneShot(hurtSound.clip);
+        animator.SetTrigger("Damaged");
         UpdateHealthText();
     }
 
     public void Die()
     {
-        Debug.Log("Player is dead!");
+        // Drugi zvuk kad crkne
+        transform.localRotation = Quaternion.Euler(new Vector3(0f, 0f, 90f));
+        animator.enabled = false;
     }
 }
