@@ -12,6 +12,17 @@ public class PlayerMovement : MonoBehaviour
     private float horizontalMovement;
     private Rigidbody2D rigidbody2d;
     private Animator animator;
+    private bool canMove;
+
+    private void OnEnable()
+    {
+        PlayerHealth.OnPlayerDeath += DisableMovement;
+    }
+
+    private void OnDisable()
+    {
+        PlayerHealth.OnPlayerDeath -= DisableMovement;
+    }
 
     // Inicijalizacije promenljivih koje nisu vidljive u inspektoru
     private void Awake()
@@ -19,11 +30,18 @@ public class PlayerMovement : MonoBehaviour
         isFacingRight = true;
         rigidbody2d = GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();
+        canMove = true;
     }
 
     // Update se izvrsava svaki frejm ( npr. 60 puta u sekundi)
     private void Update()
     {
+        if (!canMove)
+        {
+            rigidbody2d.velocity = Vector2.zero;
+            return;
+        }
+
         horizontalMovement = Input.GetAxisRaw("Horizontal"); // -1 kada korisnik pritisne A, 1 kada pritisne D na tastaturi
 
         if (Input.GetKeyDown(KeyCode.Space) && IsGrounded()) // Ako korisnik pritisne SPACE na tastaturi i ako je igrac na zemlji
@@ -39,6 +57,12 @@ public class PlayerMovement : MonoBehaviour
     // FixedUpdate je isto sto i Update, samo se koristi pri iterakciji sa sistemom za fiziku
     private void FixedUpdate()
     {
+        if (!canMove)
+        {
+            rigidbody2d.velocity = Vector2.zero;
+            return;
+        }
+
         rigidbody2d.velocity = new Vector2(horizontalMovement * moveSpeed, rigidbody2d.velocity.y); // Podesi brzinu po X osi
     }
 
@@ -85,5 +109,10 @@ public class PlayerMovement : MonoBehaviour
             temp.x *= -1f;
             transform.localScale = temp;
         }
+    }
+
+    private void DisableMovement()
+    {
+        canMove = false;
     }
 }
