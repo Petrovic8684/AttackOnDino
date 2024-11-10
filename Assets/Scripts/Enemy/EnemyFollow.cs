@@ -16,6 +16,12 @@ public abstract class EnemyFollow : MonoBehaviour
     protected int currentWaypoint = 0;
     protected Seeker seeker;
     protected Rigidbody2D rb;
+    protected Animator animator;
+
+    private void Awake()
+    {
+        animator = GetComponent<Animator>();
+    }
 
     protected virtual void Start()
     {
@@ -23,6 +29,11 @@ public abstract class EnemyFollow : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
 
         InvokeRepeating("UpdatePath", 0f, updateSeconds);
+    }
+
+    private void Update()
+    {
+        Animate();
     }
 
     protected virtual void FixedUpdate()
@@ -65,6 +76,18 @@ public abstract class EnemyFollow : MonoBehaviour
         {
             path = p;
             currentWaypoint = 0;
+        }
+    }
+
+    private void Animate()
+    {
+        if (TargetInDistance())
+        {
+            animator.SetBool("IsWalking", true); // Pusti animaciju za hod
+        }
+        else
+        {
+            animator.SetBool("IsWalking", false); // U suprotnom, pusti idle animaciju
         }
     }
 }
