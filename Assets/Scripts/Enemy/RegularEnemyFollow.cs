@@ -9,6 +9,7 @@ public class RegularEnemyFollow : EnemyFollow
     [SerializeField] private float jumpModifier;
     [SerializeField] private float jumpCheckOffset;
     [SerializeField] private Vector3 startOffset;
+
     private bool jumpEnabled, isJumping, isInAir;
     private bool isOnCoolDown;
 

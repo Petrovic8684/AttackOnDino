@@ -4,27 +4,18 @@ using UnityEngine;
 public abstract class EnemyFollow : MonoBehaviour
 {
     [SerializeField] protected Transform target;
-
-    [SerializeField] protected float activateDistance;
-
+    [SerializeField] protected float maxDistance;
+    [SerializeField] protected float minDistance;
     [SerializeField] protected float updateSeconds;
-
     [SerializeField] protected float speed;
-
     [SerializeField] protected float nextWaypointDistance;
 
     protected bool followEnabled = true;
-
     protected bool directionLookEnabled = true;
-
     protected Path path;
-
     protected int currentWaypoint = 0;
-
     protected Seeker seeker;
-
     protected Rigidbody2D rb;
-
 
     protected virtual void Start()
     {
@@ -44,12 +35,21 @@ public abstract class EnemyFollow : MonoBehaviour
 
     protected abstract void PathFollow();
 
-
     protected bool TargetInDistance()
     {
-        return Vector2.Distance(transform.position, target.transform.position) < activateDistance;
+        float distance = Vector2.Distance(transform.position, target.transform.position);
+        return !TargetTooClose(distance) && !TargetTooFar(distance);
     }
 
+    protected bool TargetTooFar(float distance)
+    {
+        return distance >= maxDistance;
+    }
+
+    protected bool TargetTooClose(float distance)
+    {
+        return distance <= minDistance;
+    }
 
     protected void UpdatePath()
     {

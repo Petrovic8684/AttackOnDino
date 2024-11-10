@@ -2271,7 +2271,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   target: {fileID: 651406616}
-  activateDistance: 15
+  maxDistance: 10
+  minDistance: 1
   updateSeconds: 0.2
   speed: 4
   nextWaypointDistance: 1
